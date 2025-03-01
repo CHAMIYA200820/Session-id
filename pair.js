@@ -86,7 +86,7 @@ router.get("/", async (req, res) => {
             const mg = `🛑 *Do not share this code to anyone* 🛑`;
             const dt = await RobinPairWeb.sendMessage(user_jid, {
               image: {
-                url: "https://raw.githubusercontent.com/Dark-Robin/Bot-Helper/refs/heads/main/autoimage/Bot%20robin%20WP.jpg",
+                url: "https://raw.githubusercontent.com/ransika2008/Img-2/refs/heads/main/High-resolution%203D%20render%2C%20warm%20hand-drawn%20sketch%20%20Embossed%20gold%20'PINK%20QUEEN%20MD'%20and%20'CONNECTED%20SUCCESSFUL'%2C%20pastel%20pink%20background%2C%20golden%20baroque%20flourishes%2C%20crown%2C%20rough%20pencil%20strokes%2C%20warm%20colors.jpg",
               },
               caption: sid,
             });
