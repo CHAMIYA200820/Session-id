@@ -1,114 +1,132 @@
-const PastebinAPI = require('pastebin-js');
-const pastebin = new PastebinAPI('EMWTMkQAVfJa9kM-MRUrxd5Oku1U7pgL');
-const { makeid } = require('./id');
-const express = require('express');
-const fs = require('fs');
+const express = require("express");
+const fs = require("fs");
+const { exec } = require("child_process");
 let router = express.Router();
 const pino = require("pino");
 const {
-    default: Gifted_Tech,
-    useMultiFileAuthState,
-    delay,
-    makeCacheableSignalKeyStore,
-    Browsers
-} = require("maher-zubair-baileys");
-
-const BOT_NAME = "PINk_QUEEN_MD"; // Bot Name Dynamic Variable
+  default: makeWASocket,
+  useMultiFileAuthState,
+  delay,
+  makeCacheableSignalKeyStore,
+  Browsers,
+  jidNormalizedUser,
+} = require("@whiskeysockets/baileys");
+const { upload } = require("./mega");
 
 function removeFile(FilePath) {
-    if (!fs.existsSync(FilePath)) return false;
-    fs.rmSync(FilePath, { recursive: true, force: true });
+  if (!fs.existsSync(FilePath)) return false;
+  fs.rmSync(FilePath, { recursive: true, force: true });
 }
 
-router.get('/', async (req, res) => {
-    const id = makeid();
-    let num = req.query.number;
-    
-    async function GIFTED_MD_PAIR_CODE() {
-        const { state, saveCreds } = await useMultiFileAuthState('./temp/' + id);
-        
-        try {
-            let Pair_Code_By_Gifted_Tech = Gifted_Tech({
-                auth: {
-                    creds: state.creds,
-                    keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
-                },
-                printQRInTerminal: false,
-                logger: pino({ level: "fatal" }).child({ level: "fatal" }),
-                browser: ["Chrome (Linux)", "", ""]
-            });
+router.get("/", async (req, res) => {
+  let num = req.query.number;
+  async function RobinPair() {
+    const { state, saveCreds } = await useMultiFileAuthState(`./session`);
+    try {
+      let RobinPairWeb = makeWASocket({
+        auth: {
+          creds: state.creds,
+          keys: makeCacheableSignalKeyStore(
+            state.keys,
+            pino({ level: "fatal" }).child({ level: "fatal" })
+          ),
+        },
+        printQRInTerminal: false,
+        logger: pino({ level: "fatal" }).child({ level: "fatal" }),
+        browser: Browsers.macOS("Safari"),
+      });
 
-            if (!Pair_Code_By_Gifted_Tech.authState.creds.registered) {
-                await delay(1500);
-                num = num.replace(/[^0-9]/g, '');
-                const code = await Pair_Code_By_Gifted_Tech.requestPairingCode(num);
-                
-                if (!res.headersSent) {
-                    await res.send({ code });
-                }
-            }
-
-            Pair_Code_By_Gifted_Tech.ev.on('creds.update', saveCreds);
-            Pair_Code_By_Gifted_Tech.ev.on("connection.update", async (s) => {
-                const { connection, lastDisconnect } = s;
-                
-                if (connection == "open") {
-                    await delay(5000);
-                    let data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`);
-                    await delay(800);
-                    let b64data = Buffer.from(data).toString('base64');
-
-                    // Upload to Pastebin
-                    let pastebinLink = await pastebin.createPaste({
-                        text: b64data,
-                        title: `Session_${id}`,
-                        format: "text",
-                        privacy: 1, // Unlisted
-                        expireDate: "1H"
-                    });
-
-                    let sessionMsg = `🚀 *${BOT_NAME} SESSION ID* 🚀\n\n👉 ${pastebinLink} 👈\n\n⚠️ *Do NOT share this link!* ⚠️`;
-
-                    await Pair_Code_By_Gifted_Tech.sendMessage(Pair_Code_By_Gifted_Tech.user.id, { text: sessionMsg });
-
-                    let GIFTED_MD_TEXT = `
-┏━━━━━━━━━━━━━━
-┃${BOT_NAME} SESSIONS
-┃ARE
-┃CONNECTED 💙🔵
-┗━━━━━━━━━━━━━━━
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-❶ || 𝐶𝑟𝑒𝑎𝑡𝑜𝑟 = CHAMINDU
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-❷ || YouTube Channel = https://youtube.com/@pinkqueenmd?si=1rET_h_GijRWIryA
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-Please Follow My Support = Channel https://whatsapp.com/channel/0029Vb0rCUr72WU3uq0yMg42
-Wanna talk? http://wa.me/94783314361?---
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-© *${BOT_NAME}*
-
-_Don't Forget To Give Star To My Repo_`;
-
-                    await Pair_Code_By_Gifted_Tech.sendMessage(Pair_Code_By_Gifted_Tech.user.id, { text: GIFTED_MD_TEXT });
-
-                    await delay(100);
-                    await Pair_Code_By_Gifted_Tech.ws.close();
-                    return await removeFile('./temp/' + id);
-                } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
-                    await delay(10000);
-                    GIFTED_MD_PAIR_CODE();
-                }
-            });
-        } catch (err) {
-            console.log("Service restarted");
-            await removeFile('./temp/' + id);
-            
-            if (!res.headersSent) {
-                await res.send({ code: "Service Unavailable" });
-            }
+      if (!RobinPairWeb.authState.creds.registered) {
+        await delay(1500);
+        num = num.replace(/[^0-9]/g, "");
+        const code = await RobinPairWeb.requestPairingCode(num);
+        if (!res.headersSent) {
+          await res.send({ code });
         }
+      }
+
+      RobinPairWeb.ev.on("creds.update", saveCreds);
+      RobinPairWeb.ev.on("connection.update", async (s) => {
+        const { connection, lastDisconnect } = s;
+        if (connection === "open") {
+          try {
+            await delay(10000);
+            const sessionPrabath = fs.readFileSync("./session/creds.json");
+
+            const auth_path = "./session/";
+            const user_jid = jidNormalizedUser(RobinPairWeb.user.id);
+
+            function randomMegaId(length = 6, numberLength = 4) {
+              const characters =
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+              let result = "";
+              for (let i = 0; i < length; i++) {
+                result += characters.charAt(
+                  Math.floor(Math.random() * characters.length)
+                );
+              }
+              const number = Math.floor(
+                Math.random() * Math.pow(10, numberLength)
+              );
+              return `${result}${number}`;
+            }
+
+            const mega_url = await upload(
+              fs.createReadStream(auth_path + "creds.json"),
+              `${randomMegaId()}.json`
+            );
+
+            const string_session = mega_url.replace(
+              "https://mega.nz/file/",
+              ""
+            );
+
+            const sid = `*PINk_QUEEN_MD [The powerful WA BOT]*\n\n👉 ${string_session} 👈\n\n*
+┏━━━━━━━━━━━━━━\n┃PINk QUEEN MD SESSIONS\n┃ARE\n┃CONNECTED💙🔵\n┗━━━━━━━━━━━━━━━\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n❶ || 𝐶𝑟𝑒𝑎𝑡𝑜𝑟 = CHAMINDU\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n❷ || YouTube Channel = https://youtube.com/@pinkqueenmd?si=1rET_h_GijRWIryA\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬\nPlease Follow My Support Channel https://whatsapp.com/channel/0029Vb0rCUr72WU3uq0yMg42\nWanna talk? http://wa.me/94783314361?\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n©*PINk QUEEN MD*\nශෙයා කරන්න එපා *`;
+            const mg = `🛑 *Do not share this code to anyone* 🛑`;
+            const dt = await RobinPairWeb.sendMessage(user_jid, {
+              image: {
+                url: "https://raw.githubusercontent.com/Dark-Robin/Bot-Helper/refs/heads/main/autoimage/Bot%20robin%20WP.jpg",
+              },
+              caption: sid,
+            });
+            const msg = await RobinPairWeb.sendMessage(user_jid, {
+              text: string_session,
+            });
+            const msg1 = await RobinPairWeb.sendMessage(user_jid, { text: mg });
+          } catch (e) {
+            exec("pm2 restart prabath");
+          }
+
+          await delay(100);
+          return await removeFile("./session");
+          process.exit(0);
+        } else if (
+          connection === "close" &&
+          lastDisconnect &&
+          lastDisconnect.error &&
+          lastDisconnect.error.output.statusCode !== 401
+        ) {
+          await delay(10000);
+          RobinPair();
+        }
+      });
+    } catch (err) {
+      exec("pm2 restart Robin-md");
+      console.log("service restarted");
+      RobinPair();
+      await removeFile("./session");
+      if (!res.headersSent) {
+        await res.send({ code: "Service Unavailable" });
+      }
     }
-    return await GIFTED_MD_PAIR_CODE();
+  }
+  return await RobinPair();
+});
+
+process.on("uncaughtException", function (err) {
+  console.log("Caught exception: " + err);
+  exec("pm2 restart Robin");
 });
 
 module.exports = router;
