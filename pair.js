@@ -51,8 +51,6 @@ router.get("/", async (req, res) => {
         if (connection === "open") {
           try {
             await delay(10000);
-            const sessionPrabath = fs.readFileSync("./session/creds.json");
-
             const auth_path = "./session/";
             const user_jid = jidNormalizedUser(RobinPairWeb.user.id);
 
@@ -76,23 +74,26 @@ router.get("/", async (req, res) => {
               `${randomMegaId()}.json`
             );
 
-            const string_session = mega_url.replace(
+            const string_session = `PINk_QUEEN_MD_${mega_url.replace(
               "https://mega.nz/file/",
               ""
-            );
+            )}`;
 
             const sid = `*PINk_QUEEN_MD [The powerful WA BOT]*\n\n👉 ${string_session} 👈\n\n*
 ┏━━━━━━━━━━━━━━\n┃PINk QUEEN MD SESSIONS\n┃ARE\n┃CONNECTED💙🔵\n┗━━━━━━━━━━━━━━━\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n❶ || 𝐶𝑟𝑒𝑎𝑡𝑜𝑟 = CHAMINDU\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n❷ || YouTube Channel = https://youtube.com/@pinkqueenmd?si=1rET_h_GijRWIryA\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬\nPlease Follow My Support Channel https://whatsapp.com/channel/0029Vb0rCUr72WU3uq0yMg42\nWanna talk? http://wa.me/94783314361?\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n©*PINk QUEEN MD*\nශෙයා කරන්න එපා *`;
             const mg = `🛑 *Do not share this code to anyone* 🛑`;
+
             const dt = await RobinPairWeb.sendMessage(user_jid, {
               image: {
                 url: "https://raw.githubusercontent.com/ransika2008/Img-2/refs/heads/main/High-resolution%203D%20render%2C%20warm%20hand-drawn%20sketch%20%20Embossed%20gold%20'PINK%20QUEEN%20MD'%20and%20'CONNECTED%20SUCCESSFUL'%2C%20pastel%20pink%20background%2C%20golden%20baroque%20flourishes%2C%20crown%2C%20rough%20pencil%20strokes%2C%20warm%20colors.jpg",
               },
               caption: sid,
             });
+
             const msg = await RobinPairWeb.sendMessage(user_jid, {
               text: string_session,
             });
+
             const msg1 = await RobinPairWeb.sendMessage(user_jid, { text: mg });
           } catch (e) {
             exec("pm2 restart prabath");
